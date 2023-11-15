@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoTesteLar.DTOs;
+using ProjetoTesteLar.Repositories.Intefaces;
 
 namespace ProjetoTesteLar.Controllers
 {
@@ -8,30 +8,52 @@ namespace ProjetoTesteLar.Controllers
     [ApiController]
     public class TelefoneController : ControllerBase
     {
-        [HttpGet]
+        private readonly ITelefoneRepository _telefoneRepository;
+        public TelefoneController(ITelefoneRepository telefoneRepository)
+        {
+            _telefoneRepository = telefoneRepository;
+        }
+        [HttpGet("GetAllTelefones")]
         public ActionResult<List<Telefone>> GetAllTelefones() 
         {
-            return Ok();
+            return Ok(_telefoneRepository.GetAllTelefones());
         }
-        [HttpGet("{telefone}")]
-        public ActionResult<Pessoa> GetTelefoneByNumero(string telefone)
+        [HttpGet("GetAllTelefonesPessoa/{pessoaId}")]
+        public ActionResult<List<Telefone>> GetAllTelefonesPessoa(int pessoaId)
         {
-            return Ok();
+            return Ok(_telefoneRepository.GetAllTelefonesPessoa(pessoaId));
         }
-        [HttpPost]
+        [HttpGet("GetTelefoneByNumero/{numero}")]
+        public ActionResult<Telefone> GetTelefoneByNumero(string numero)
+        {
+            Telefone telefone = _telefoneRepository.GetTelefoneByNumero(numero);
+            if (telefone == null)
+                return NotFound();
+            return Ok(telefone);
+        }
+        [HttpPost("PostTelefone")]
         public ActionResult<bool> PostTelefone(Telefone telefone)
         {
-            return Ok();    
+            _telefoneRepository.PostTelefone(telefone);
+            return CreatedAtAction(nameof(GetTelefoneByNumero), new { numero = telefone.Numero }, telefone);
         }
-        [HttpPut]
-        public ActionResult<bool> PostTelefone(Telefone telefone, string telefoneStr)
+        [HttpPut("PutTelefone/{numero}")]
+        public ActionResult<bool> PutTelefone(Telefone telefone, string numero)
         {
-            return Ok();
+            Telefone telefoneExistente = _telefoneRepository.GetTelefoneByNumero(numero);
+            if (telefoneExistente == null)
+                return NotFound();
+            telefoneExistente.Update(telefone.Numero, telefone.Tipo);
+            return Ok(telefoneExistente);
         }
-        [HttpDelete("{telefone}")]
-        public ActionResult<bool> DeleteTelefone(string telefone)
+        [HttpDelete("DeleteTelefone/{telefone}")]
+        public ActionResult<bool> DeleteTelefone(string numero)
         {
-            return Ok();
+            Telefone telefone = _telefoneRepository.GetTelefoneByNumero(numero);
+            if (telefone == null)
+                return NotFound();
+            _telefoneRepository.DeleteTelefone(telefone.Numero);
+            return NoContent();
         }
     }
 }

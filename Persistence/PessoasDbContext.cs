@@ -8,6 +8,6 @@ namespace ProjetoTesteLar.Persistence
         {
             Pessoas = new List<Pessoa>();
         }
-        public List<Pessoa > Pessoas { get; set; }
+        public List<Pessoa> Pessoas { get; set; }
     }
 }

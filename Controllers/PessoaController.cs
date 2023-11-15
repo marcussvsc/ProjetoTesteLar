@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoTesteLar.DTOs;
-using ProjetoTesteLar.Persistence;
-using ProjetoTesteLar.Repositories;
 using ProjetoTesteLar.Repositories.Intefaces;
 
 namespace ProjetoTesteLar.Controllers
@@ -39,16 +36,16 @@ namespace ProjetoTesteLar.Controllers
         public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)
         {
             Pessoa pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
-            if (pessoa == null)
+            if (pessoaExistente == null)
                 return NotFound();
             pessoaExistente.Update(pessoa.Nome, pessoa.CPF, pessoa.DtNascimento, pessoa.Ativo);
-            return Ok(pessoa);
+            return Ok(pessoaExistente);
 
         }
-        [HttpDelete("DeletePessoa/{cpf}")]
-        public ActionResult<bool> DeletePessoa(int cpf)
+        [HttpDelete("DeletePessoa/{pessoaId}")]
+        public ActionResult<bool> DeletePessoa(int pessoaId)
         {
-            Pessoa pessoa = _pessoaRepository.GetPessoaById(cpf);
+            Pessoa pessoa = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             _pessoaRepository.DeletePessoa(pessoa.PessoaId);

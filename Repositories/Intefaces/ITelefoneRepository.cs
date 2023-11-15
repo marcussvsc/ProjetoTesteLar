@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjetoTesteLar.DTOs;
+﻿using ProjetoTesteLar.DTOs;
 
 namespace ProjetoTesteLar.Repositories.Intefaces
 {
     public interface ITelefoneRepository
     {
         public List<Telefone> GetAllTelefones();
-        public Pessoa GetTelefoneByNumero(string telefone);
+        public List<Telefone> GetAllTelefonesPessoa(int pessoaId);
+        public Telefone GetTelefoneByNumero(string numero);
         public bool PostTelefone(Telefone telefone);
-        public bool PostTelefone(Telefone telefone, string telefoneStr);
-        public bool DeleteTelefone(string telefone);
+        public bool PutTelefone(Telefone telefone, string numero);
+        public bool DeleteTelefone(string numero);
     }
 }

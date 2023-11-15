@@ -12,6 +12,7 @@ namespace ProjetoTesteLar
 
             // Add services to the container.
             builder.Services.AddSingleton<PessoasDbContext>();
+            builder.Services.AddSingleton<TelefonesDbContext>();
 
 
             builder.Services.AddControllers();
@@ -20,6 +21,7 @@ namespace ProjetoTesteLar
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
+            builder.Services.AddScoped<ITelefoneRepository, TelefoneRepository>();
 
             var app = builder.Build();
 
