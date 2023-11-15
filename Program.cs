@@ -1,3 +1,7 @@
+using ProjetoTesteLar.Persistence;
+using ProjetoTesteLar.Repositories;
+using ProjetoTesteLar.Repositories.Intefaces;
+
 namespace ProjetoTesteLar
 {
     public class Program
@@ -7,11 +11,15 @@ namespace ProjetoTesteLar
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddSingleton<PessoasDbContext>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 
             var app = builder.Build();
 
