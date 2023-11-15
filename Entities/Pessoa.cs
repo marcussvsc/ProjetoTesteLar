@@ -2,13 +2,13 @@
 {
     public class Pessoa
     {
-        public Pessoa(string nome, string cpf, DateTime dtNascimento, bool ativo)
-        {
-            Nome = nome;
-            CPF = cpf;
-            DtNascimento = dtNascimento;
-            Ativo = ativo;
-        }
+        //public Pessoa(string nome, string cpf, DateTime dtNascimento, bool ativo)
+        //{
+        //    Nome = nome;
+        //    CPF = cpf;
+        //    DtNascimento = dtNascimento;
+        //    Ativo = ativo;
+        //}
 
         public string Nome { get; set; } = string.Empty;
         public string CPF { get; set; } = string.Empty;

@@ -6,30 +6,30 @@ namespace ProjetoTesteLar.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PessoaController : ControllerBase
+    public class TelefoneController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<List<Pessoa>> GetAllPessoas() 
+        public ActionResult<List<Telefone>> GetAllTelefones() 
         {
             return Ok();
         }
-        [HttpGet("{cpf}")]
-        public ActionResult<Pessoa> GetPessoaByCpf(string cpf)
+        [HttpGet("{telefone}")]
+        public ActionResult<Pessoa> GetTelefoneByNumero(string telefone)
         {
             return Ok();
         }
         [HttpPost]
-        public ActionResult<bool> PostPessoa(Pessoa pessoa)
+        public ActionResult<bool> PostTelefone(Telefone telefone)
         {
             return Ok();    
         }
         [HttpPut]
-        public ActionResult<bool> PostPessoa(Pessoa pessoa, string cpf)
+        public ActionResult<bool> PostTelefone(Telefone telefone, string telefoneStr)
         {
             return Ok();
         }
-        [HttpDelete("{cpf}")]
-        public ActionResult<bool> DeletePessoa(string cpf)
+        [HttpDelete("{telefone}")]
+        public ActionResult<bool> DeleteTelefone(string telefone)
         {
             return Ok();
         }
