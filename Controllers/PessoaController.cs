@@ -21,10 +21,10 @@ namespace ProjetoTesteLar.Controllers
         {            
             return Ok(_pessoaRepository.GetAllPessoas());
         }
-        [HttpGet("GetPessoaByCpf/{cpf}")]
-        public ActionResult<Pessoa> GetPessoaByCpf(string cpf)
+        [HttpGet("GetPessoaById/{pessoaId}")]
+        public ActionResult<Pessoa> GetPessoaById(int pessoaId)
         {
-            Pessoa pessoa = _pessoaRepository.GetPessoaByCpf(cpf);
+            Pessoa pessoa = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             return Ok(pessoa);
@@ -33,12 +33,12 @@ namespace ProjetoTesteLar.Controllers
         public ActionResult<bool> PostPessoa(Pessoa pessoa)
         {
             _pessoaRepository.PostPessoa(pessoa);
-            return CreatedAtAction(nameof(GetPessoaByCpf), new { cpf = pessoa.CPF}, pessoa);    
+            return CreatedAtAction(nameof(GetPessoaById), new { pessoaId = pessoa.PessoaId}, pessoa);    
         }
-        [HttpPut("PutPessoa/{cpf}")]
-        public ActionResult<bool> PutPessoa(Pessoa pessoa, string cpf)
+        [HttpPut("PutPessoa/{pessoaId}")]
+        public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)
         {
-            Pessoa pessoaExistente = _pessoaRepository.GetPessoaByCpf(cpf);
+            Pessoa pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             pessoaExistente.Update(pessoa.Nome, pessoa.CPF, pessoa.DtNascimento, pessoa.Ativo);
@@ -46,12 +46,12 @@ namespace ProjetoTesteLar.Controllers
 
         }
         [HttpDelete("DeletePessoa/{cpf}")]
-        public ActionResult<bool> DeletePessoa(string cpf)
+        public ActionResult<bool> DeletePessoa(int cpf)
         {
-            Pessoa pessoa = _pessoaRepository.GetPessoaByCpf(cpf);
+            Pessoa pessoa = _pessoaRepository.GetPessoaById(cpf);
             if (pessoa == null)
                 return NotFound();
-            _pessoaRepository.DeletePessoa(pessoa.CPF);
+            _pessoaRepository.DeletePessoa(pessoa.PessoaId);
             return NoContent();
         }
     }

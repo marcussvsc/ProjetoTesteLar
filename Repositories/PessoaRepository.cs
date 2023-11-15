@@ -16,9 +16,9 @@ namespace ProjetoTesteLar.Repositories
             List<Pessoa> pessoas = _context.Pessoas;
             return pessoas;
         }
-        public Pessoa GetPessoaByCpf(string cpf)
+        public Pessoa GetPessoaById(int pessoaId)
         {
-            return _context.Pessoas.SingleOrDefault(p => p.CPF.Equals(cpf));
+            return _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
         }
         public bool PostPessoa(Pessoa pessoa)
         {
@@ -26,9 +26,9 @@ namespace ProjetoTesteLar.Repositories
             return true;
         }
 
-        public bool PutPessoa(Pessoa pessoa, string cpf)
+        public bool PutPessoa(Pessoa pessoa, int pessoaId)
         {
-            Pessoa pessoaExistente = _context.Pessoas.SingleOrDefault(p => p.CPF.Equals(cpf));
+            Pessoa pessoaExistente = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoaExistente != null)
             {
@@ -37,9 +37,9 @@ namespace ProjetoTesteLar.Repositories
             }
             else throw new Exception("Nenhuma Pessoa encontrada com o CPF informado"); 
         }
-        public bool DeletePessoa(string cpf)
+        public bool DeletePessoa(int pessoaId)
         {
-            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.CPF.Equals(cpf));
+            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoa != null)
             {
