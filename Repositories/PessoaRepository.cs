@@ -7,6 +7,7 @@ namespace ProjetoTesteLar.Repositories
     public class PessoaRepository : IPessoaRepository
     {
         private readonly PessoasDbContext _context;
+        private readonly TelefoneRepository telefoneRepository;
         public PessoaRepository(PessoasDbContext context)
         {
             _context = context;
@@ -16,9 +17,20 @@ namespace ProjetoTesteLar.Repositories
             List<Pessoa> pessoas = _context.Pessoas;
             return pessoas;
         }
-        public Pessoa GetPessoaById(int pessoaId)
+        public PessoaDTO GetPessoaById(int pessoaId)
         {
-            return _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+
+            if (pessoa == null)
+                return null;
+            return new PessoaDTO() 
+            {
+                PessoaId = pessoa.PessoaId,
+                Nome = pessoa.Nome,
+                Ativo = pessoa.Ativo,
+                CPF = pessoa.CPF,
+                DtNascimento = pessoa.DtNascimento
+            };
         }
         public bool PostPessoa(Pessoa pessoa)
         {
@@ -49,11 +61,11 @@ namespace ProjetoTesteLar.Repositories
             else throw new Exception("Nenhuma Pessoa encontrada com o CPF informado");
             
         }
+        private void PreencherPessoaTelefones(int pessoaId)
+        {
+            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            pessoa.Telefones = telefoneRepository.GetAllTelefonesPessoa(pessoaId);
+        }
 
-        
-
-        
-
-        
     }
 }

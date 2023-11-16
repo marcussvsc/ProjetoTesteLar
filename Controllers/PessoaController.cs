@@ -9,9 +9,11 @@ namespace ProjetoTesteLar.Controllers
     public class PessoaController : ControllerBase
     {
         private readonly IPessoaRepository _pessoaRepository;
-        public PessoaController(IPessoaRepository pessoaRepository)
+        private readonly ITelefoneRepository _telefoneRepository;
+        public PessoaController(IPessoaRepository pessoaRepository, ITelefoneRepository telefoneRepository)
         {
             _pessoaRepository = pessoaRepository;
+            _telefoneRepository = telefoneRepository;
         }
         [HttpGet("GetAllPessoas")]
         public ActionResult<List<Pessoa>> GetAllPessoas() 
@@ -19,11 +21,20 @@ namespace ProjetoTesteLar.Controllers
             return Ok(_pessoaRepository.GetAllPessoas());
         }
         [HttpGet("GetPessoaById/{pessoaId}")]
-        public ActionResult<Pessoa> GetPessoaById(int pessoaId)
+        public ActionResult<PessoaDTO> GetPessoaById(int pessoaId)
         {
-            Pessoa pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
+            return Ok(pessoa);
+        }
+        [HttpGet("PreencherPessoaTelefones/{pessoaId}")]
+        public ActionResult<PessoaDTO> PreencherPessoaTelefones(int pessoaId)
+        {
+            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            if (pessoa == null)
+                return NotFound();
+            pessoa.Telefones = _telefoneRepository.GetAllTelefonesPessoa(pessoaId);
             return Ok(pessoa);
         }
         [HttpPost("PostPessoa")]
@@ -35,17 +46,17 @@ namespace ProjetoTesteLar.Controllers
         [HttpPut("PutPessoa/{pessoaId}")]
         public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)
         {
-            Pessoa pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoaExistente == null)
                 return NotFound();
-            pessoaExistente.Update(pessoa.Nome, pessoa.CPF, pessoa.DtNascimento, pessoa.Ativo);
+            _pessoaRepository.PutPessoa(pessoa, pessoaId);
             return Ok(pessoaExistente);
 
         }
         [HttpDelete("DeletePessoa/{pessoaId}")]
         public ActionResult<bool> DeletePessoa(int pessoaId)
         {
-            Pessoa pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             _pessoaRepository.DeletePessoa(pessoa.PessoaId);

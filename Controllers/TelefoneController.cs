@@ -30,7 +30,7 @@ namespace ProjetoTesteLar.Controllers
             if (telefone == null)
                 return NotFound();
             return Ok(telefone);
-        }
+        }        
         [HttpPost("PostTelefone")]
         public ActionResult<bool> PostTelefone(Telefone telefone)
         {

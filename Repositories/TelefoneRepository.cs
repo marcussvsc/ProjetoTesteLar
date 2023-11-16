@@ -7,6 +7,7 @@ namespace ProjetoTesteLar.Repositories
     public class TelefoneRepository : ITelefoneRepository
     {
         private readonly TelefonesDbContext _context;
+        private readonly PessoasDbContext _contextPessoa;
         public TelefoneRepository(TelefonesDbContext context)
         {
             _context = context;
@@ -46,6 +47,16 @@ namespace ProjetoTesteLar.Repositories
             if (telefone != null)
             {
                 _context.Telefones.Remove(telefone);
+                PessoasDbContext pessoaContext = new PessoasDbContext();
+                Pessoa pessoa = pessoaContext.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(telefone.PessoaId));
+                if (pessoa != null)
+                {
+                    Telefone telefoneExistente = pessoa.Telefones.SingleOrDefault(t => t.Numero.Equals(telefone.Numero));
+                    if (telefoneExistente != null)
+                    {
+                        pessoa.Telefones.Remove(telefoneExistente);
+                    }
+                }
                 return true;
             }
             else throw new Exception("Nenhum Telefone encontrado com o número informado");
@@ -54,6 +65,6 @@ namespace ProjetoTesteLar.Repositories
         {
             List<Telefone> telefones = _context.Telefones;
             return telefones.FindAll(p => p.PessoaId.Equals(pessoaId));
-        }
+        }        
     }
 }
