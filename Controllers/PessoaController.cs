@@ -10,10 +10,12 @@ namespace ProjetoTesteLar.Controllers
     {
         private readonly IPessoaRepository _pessoaRepository;
         private readonly ITelefoneRepository _telefoneRepository;
-        public PessoaController(IPessoaRepository pessoaRepository, ITelefoneRepository telefoneRepository)
+        private readonly IPessoaEnderecoRepository _pessoaEnderecoRepository;
+        public PessoaController(IPessoaRepository pessoaRepository, ITelefoneRepository telefoneRepository, IPessoaEnderecoRepository pessoaEnderecoRepository)
         {
             _pessoaRepository = pessoaRepository;
             _telefoneRepository = telefoneRepository;
+            _pessoaEnderecoRepository = pessoaEnderecoRepository;
         }
         [HttpGet("GetAllPessoas")]
         public ActionResult<List<Pessoa>> GetAllPessoas() 
@@ -42,6 +44,12 @@ namespace ProjetoTesteLar.Controllers
         {
             _pessoaRepository.PostPessoa(pessoa);
             return CreatedAtAction(nameof(GetPessoaById), new { pessoaId = pessoa.PessoaId}, pessoa);    
+        }
+        [HttpPost("PostPessoaEndereco/{pessoaId}/{enderecoId}")]
+        public ActionResult<bool> PostPessoaEndereco(int pessoaId, int enderecoId)
+        {
+            _pessoaEnderecoRepository.PostPessoaEndereco(pessoaId, enderecoId);
+            return true;
         }
         [HttpPut("PutPessoa/{pessoaId}")]
         public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)

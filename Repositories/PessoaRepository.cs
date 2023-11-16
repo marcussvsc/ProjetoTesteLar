@@ -12,11 +12,13 @@ namespace ProjetoTesteLar.Repositories
         {
             _context = context;
         }
+
         public List<Pessoa> GetAllPessoas()
         {
             List<Pessoa> pessoas = _context.Pessoas;
             return pessoas;
         }
+
         public PessoaDTO GetPessoaById(int pessoaId)
         {
             Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
@@ -32,11 +34,12 @@ namespace ProjetoTesteLar.Repositories
                 DtNascimento = pessoa.DtNascimento
             };
         }
+
         public bool PostPessoa(Pessoa pessoa)
         {
             _context.Pessoas.Add(pessoa);
             return true;
-        }
+        }        
 
         public bool PutPessoa(Pessoa pessoa, int pessoaId)
         {
@@ -47,8 +50,9 @@ namespace ProjetoTesteLar.Repositories
                 pessoaExistente.Update(pessoa.Nome, pessoa.CPF, pessoa.DtNascimento, pessoa.Ativo);
                 return true;
             }
-            else throw new Exception("Nenhuma Pessoa encontrada com o CPF informado"); 
+            else throw new Exception("Nenhuma Pessoa encontrada com o ID informado"); 
         }
+
         public bool DeletePessoa(int pessoaId)
         {
             Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
@@ -58,9 +62,10 @@ namespace ProjetoTesteLar.Repositories
                 _context.Pessoas.Remove(pessoa);
                 return true;
             }
-            else throw new Exception("Nenhuma Pessoa encontrada com o CPF informado");
+            else throw new Exception("Nenhuma Pessoa encontrada com o ID informado");
             
         }
+
         private void PreencherPessoaTelefones(int pessoaId)
         {
             Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
