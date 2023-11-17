@@ -1,4 +1,6 @@
-﻿namespace ProjetoTesteLar.DTOs
+﻿using ProjetoTesteLar.Entities;
+
+namespace ProjetoTesteLar.DTOs
 {
     public class PessoaDTO
     {
@@ -8,5 +10,6 @@
         public DateTime DtNascimento { get; set; }
         public bool Ativo { get; set; }
         public List<Telefone>? Telefones { get; set; }
+        public List<Endereco>? Enderecos { get; set; }
     }
 }

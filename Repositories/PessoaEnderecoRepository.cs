@@ -21,7 +21,14 @@ namespace ProjetoTesteLar.Repositories
         {
             return _context.PessoasEnderecos.SingleOrDefault(p =>  p.PessoaId.Equals(pessoaId) && p.EnderecoId.Equals(enderecoId));
         }
-
+        public List<PessoaEndereco>GetPessoaEnderecosByPessoaId(int pessoaId)
+        {
+            PessoaRepository pessoaRepository = new PessoaRepository(_pessoaContext);
+            PessoaDTO pessoa = pessoaRepository.GetPessoaById(pessoaId);
+            if (pessoa == null)
+                throw new Exception("Nenhuma Pessoa encontrada com o ID informado");
+            return _context.PessoasEnderecos.FindAll(p => p.PessoaId.Equals(pessoaId));
+        }
         public bool PostPessoaEndereco(int pessoaId, int enderecoId)
         {
             PessoaRepository pessoaRepository = new PessoaRepository(_pessoaContext);

@@ -11,11 +11,13 @@ namespace ProjetoTesteLar.Controllers
         private readonly IPessoaRepository _pessoaRepository;
         private readonly ITelefoneRepository _telefoneRepository;
         private readonly IPessoaEnderecoRepository _pessoaEnderecoRepository;
-        public PessoaController(IPessoaRepository pessoaRepository, ITelefoneRepository telefoneRepository, IPessoaEnderecoRepository pessoaEnderecoRepository)
+        private readonly IEnderecoRepository _enderecoRepository;
+        public PessoaController(IPessoaRepository pessoaRepository, ITelefoneRepository telefoneRepository, IPessoaEnderecoRepository pessoaEnderecoRepository, IEnderecoRepository enderecoRepository)
         {
             _pessoaRepository = pessoaRepository;
             _telefoneRepository = telefoneRepository;
             _pessoaEnderecoRepository = pessoaEnderecoRepository;
+            _enderecoRepository = enderecoRepository;
         }
         [HttpGet("GetAllPessoas")]
         public ActionResult<List<Pessoa>> GetAllPessoas() 
@@ -49,7 +51,21 @@ namespace ProjetoTesteLar.Controllers
         public ActionResult<bool> PostPessoaEndereco(int pessoaId, int enderecoId)
         {
             _pessoaEnderecoRepository.PostPessoaEndereco(pessoaId, enderecoId);
-            return true;
+            return NoContent();
+        }
+        [HttpPost("PreencherPessoaEnderecos/{pessoaId}")]
+        public ActionResult<Pessoa> PreencherPessoaEnderecos(int pessoaId)
+        {
+            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            if(pessoa == null)
+                return NotFound();
+            _pessoaEnderecoRepository.GetPessoaEnderecosByPessoaId(pessoaId).ForEach(p => 
+            {
+                if (pessoa.Enderecos == null)
+                    pessoa.Enderecos = new List<Entities.Endereco>();
+                pessoa.Enderecos.Add(_enderecoRepository.GetEnderecoById(p.EnderecoId));
+            });
+            return Ok(pessoa);
         }
         [HttpPut("PutPessoa/{pessoaId}")]
         public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)
