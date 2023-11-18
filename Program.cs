@@ -32,7 +32,9 @@ namespace ProjetoTesteLar
             builder.Services.AddScoped<ITelefoneRepository, TelefoneRepository>();
             builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
             builder.Services.AddScoped<IPessoaEnderecoRepository, PessoaEnderecoRepository>();
+
             builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 
             var app = builder.Build();

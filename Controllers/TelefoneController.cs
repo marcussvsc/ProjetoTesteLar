@@ -35,9 +35,9 @@ namespace ProjetoTesteLar.Controllers
             return Ok(telefone);
         }        
         [HttpPost("PostTelefone")]
-        public ActionResult<bool> PostTelefone(CreateTelefoneDTO createTelefoneDTO)
+        public async Task<ActionResult<bool>> PostTelefone(CreateTelefoneDTO createTelefoneDTO)
         {
-            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(createTelefoneDTO.PessoaId);
+            PessoaDTO pessoa = await _pessoaRepository.GetPessoaById(createTelefoneDTO.PessoaId);
             if(pessoa == null)
                 return NotFound();
             Telefone telefone  = new Telefone() 
@@ -47,7 +47,7 @@ namespace ProjetoTesteLar.Controllers
                 Tipo = createTelefoneDTO.Tipo
             };
             telefone.Pessoa = pessoa;
-            _telefoneRepository.PostTelefone(telefone);
+            await _telefoneRepository.PostTelefone(telefone);
             return CreatedAtAction(nameof(GetTelefoneByNumero), new { numero = telefone.Numero }, telefone);
         }
         [HttpPut("PutTelefone/{numero}")]

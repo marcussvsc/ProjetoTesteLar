@@ -25,17 +25,17 @@ namespace ProjetoTesteLar.Controllers
             return Ok(_pessoaRepository.GetAllPessoas());
         }
         [HttpGet("GetPessoaById/{pessoaId}")]
-        public ActionResult<PessoaDTO> GetPessoaById(int pessoaId)
+        public async Task<ActionResult<PessoaDTO>> GetPessoaById(int pessoaId)
         {
-            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = await _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             return Ok(pessoa);
         }
         [HttpGet("PreencherPessoaTelefones/{pessoaId}")]
-        public ActionResult<PessoaDTO> PreencherPessoaTelefones(int pessoaId)
+        public async Task<ActionResult<PessoaDTO>> PreencherPessoaTelefones(int pessoaId)
         {
-            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = await _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             pessoa.Telefones = _telefoneRepository.GetAllTelefonesPessoa(pessoaId);
@@ -54,9 +54,9 @@ namespace ProjetoTesteLar.Controllers
             return NoContent();
         }
         [HttpPost("PreencherPessoaEnderecos/{pessoaId}")]
-        public ActionResult<Pessoa> PreencherPessoaEnderecos(int pessoaId)
+        public async Task<ActionResult<Pessoa>> PreencherPessoaEnderecos(int pessoaId)
         {
-            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = await _pessoaRepository.GetPessoaById(pessoaId);
             if(pessoa == null)
                 return NotFound();
             _pessoaEnderecoRepository.GetPessoaEnderecosByPessoaId(pessoaId).ForEach(p => 
@@ -68,9 +68,9 @@ namespace ProjetoTesteLar.Controllers
             return Ok(pessoa);
         }
         [HttpPut("PutPessoa/{pessoaId}")]
-        public ActionResult<bool> PutPessoa(PessoaDTO pessoa, int pessoaId)
+        public async Task<ActionResult<bool>> PutPessoa(PessoaDTO pessoa, int pessoaId)
         {
-            PessoaDTO pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoaExistente = await _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoaExistente == null)
                 return NotFound();
             _pessoaRepository.PutPessoa(pessoa, pessoaId);
@@ -78,9 +78,9 @@ namespace ProjetoTesteLar.Controllers
 
         }
         [HttpDelete("DeletePessoa/{pessoaId}")]
-        public ActionResult<bool> DeletePessoa(int pessoaId)
+        public async Task<ActionResult<bool>> DeletePessoa(int pessoaId)
         {
-            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(pessoaId);
+            PessoaDTO pessoa = await _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoa == null)
                 return NotFound();
             _pessoaRepository.DeletePessoa(pessoa.PessoaId);

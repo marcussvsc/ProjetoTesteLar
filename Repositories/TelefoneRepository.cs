@@ -20,15 +20,13 @@ namespace ProjetoTesteLar.Repositories
 
         public Telefone GetTelefoneByNumero(string numero)
         {
-            return _context.Telefones
-                .Include(t => t.Pessoa)
-                .SingleOrDefault(p => p.Numero.Equals(numero));
+            return _context.Telefones.SingleOrDefault(p => p.Numero.Equals(numero));
         }
 
-        public bool PostTelefone(Telefone telefone)
+        public async Task<bool> PostTelefone(Telefone telefone)
         {
-            _context.Telefones.Add(telefone);
-            //_context.SaveChanges();
+            await _context.Telefones.AddAsync(telefone);
+            await _context.SaveChangesAsync();
             return true;
         }
 

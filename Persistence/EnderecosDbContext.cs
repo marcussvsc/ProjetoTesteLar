@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Hosting;
-using ProjetoTesteLar.DTOs;
 using ProjetoTesteLar.Entities;
 
 namespace ProjetoTesteLar.Persistence
@@ -10,7 +8,10 @@ namespace ProjetoTesteLar.Persistence
     {
         public void Configure(EntityTypeBuilder<Endereco> builder)
         {
-            
+            //Endereco
+            builder.HasKey(p => p.EnderecoId);
+            builder.HasMany(e => e.Pessoas)
+                   .WithMany(e => e.Enderecos);
         }
     }
 }

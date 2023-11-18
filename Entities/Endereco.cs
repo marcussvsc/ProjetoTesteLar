@@ -11,7 +11,7 @@ namespace ProjetoTesteLar.Entities
         public int Numero { get; set; }
         public string Cidade { get; set; }
         public string Estado { get; set; }
-        public List<PessoaDTO>? Pessoas { get; set; }
+        public virtual List<PessoaDTO>? Pessoas { get; set; }
 
         public void Update(string cep, string rua, string bairro, int numero, string cidade, string estado)
         {

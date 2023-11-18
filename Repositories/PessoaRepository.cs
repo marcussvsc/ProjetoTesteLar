@@ -15,13 +15,15 @@ namespace ProjetoTesteLar.Repositories
 
         public List<PessoaDTO> GetAllPessoas()
         {
-            List<PessoaDTO> pessoas = _context.Pessoas.ToList();
+            List<PessoaDTO> pessoas = _context.Pessoas
+                                      .Include(p => p.Telefones)
+                                      .ToList();
             return pessoas;
         }
 
-        public PessoaDTO GetPessoaById(int pessoaId)
+        public async Task<PessoaDTO> GetPessoaById(int pessoaId)
         {
-            PessoaDTO pessoa = _context.Pessoas.AsNoTracking().SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            PessoaDTO pessoa = await _context.Pessoas.AsNoTracking().SingleOrDefaultAsync(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoa == null)
                 return null;

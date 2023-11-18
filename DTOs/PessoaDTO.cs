@@ -9,7 +9,7 @@ namespace ProjetoTesteLar.DTOs
         public string CPF { get; set; } = string.Empty;
         public DateTime DtNascimento { get; set; }
         public bool Ativo { get; set; }
-        public List<Telefone>? Telefones { get; set; }
-        public List<Endereco>? Enderecos { get; set; }
+        public virtual List<Telefone>? Telefones { get; set; }
+        public virtual List<Endereco>? Enderecos { get; set; }
     }
 }

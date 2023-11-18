@@ -16,32 +16,11 @@ namespace ProjetoTesteLar.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new PessoasDbContext());
+            modelBuilder.ApplyConfiguration(new TelefonesDbContext());
+            modelBuilder.ApplyConfiguration(new EnderecosDbContext());
 
-            //Pessoa
-            modelBuilder.Entity<PessoaDTO>().HasKey(p => p.PessoaId);
-            modelBuilder.Entity<PessoaDTO>().HasMany(e => e.Telefones)
-                .WithOne(e => e.Pessoa)
-                .HasForeignKey(e => e.TelefoneId)
-                .IsRequired();
-            modelBuilder.Entity<PessoaDTO>().HasMany(e => e.Enderecos)
-                .WithMany(e => e.Pessoas);
-            //modelBuilder.Entity<Pessoa>()
-            //   .HasMany(e => e.Enderecos)
-            //   .WithMany(e => e.Pessoas)
-            //   .UsingEntity<PessoaEndereco>(
-            //       l => l.HasOne<Endereco>().WithMany().HasForeignKey(e => e.EnderecoId),
-            //       r => r.HasOne<Pessoa>().WithMany().HasForeignKey(e => e.PessoaId));
-
-
-            //Telefone
-            modelBuilder.Entity<Telefone>().HasKey(t => t.TelefoneId);
-            modelBuilder.Entity<Telefone>().HasOne(t => t.Pessoa);
-
-
-            //Endereco
-            modelBuilder.Entity<Endereco>().HasKey(p => p.EnderecoId);
-            modelBuilder.Entity<Endereco>().HasMany(e => e.Pessoas)
-                .WithMany(e => e.Enderecos);
+            base.OnModelCreating(modelBuilder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

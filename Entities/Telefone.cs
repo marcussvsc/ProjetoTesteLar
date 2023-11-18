@@ -1,4 +1,5 @@
 ﻿using ProjetoTesteLar.Enums;
+using System.Text.Json.Serialization;
 
 namespace ProjetoTesteLar.DTOs
 {
@@ -8,7 +9,8 @@ namespace ProjetoTesteLar.DTOs
         public string Numero { get; set; } = string.Empty;
         public TipoTelefone Tipo { get; set; }
         public int PessoaId { get; set; }
-        public PessoaDTO Pessoa{ get; set; }
+        [JsonIgnore]
+        public virtual PessoaDTO Pessoa{ get; set; }
 
         public void Update(string numero, TipoTelefone tipo)
         {

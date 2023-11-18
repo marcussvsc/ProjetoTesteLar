@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Hosting;
 using ProjetoTesteLar.DTOs;
-using System.Reflection.Emit;
 
 namespace ProjetoTesteLar.Persistence
 {
@@ -10,7 +8,9 @@ namespace ProjetoTesteLar.Persistence
     {
         public void Configure(EntityTypeBuilder<Telefone> builder)
         {
-            
+            //Telefone
+            builder.HasKey(t => t.TelefoneId);
+            builder.HasOne(t => t.Pessoa);
         }
     }
 }
