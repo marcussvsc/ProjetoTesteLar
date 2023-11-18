@@ -1,13 +1,16 @@
-﻿using ProjetoTesteLar.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjetoTesteLar.DTOs;
+using ProjetoTesteLar.Entities;
+using System.Reflection.Metadata;
 
 namespace ProjetoTesteLar.Persistence
 {
-    public class PessoasDbContext
+    public class PessoasDbContext : IEntityTypeConfiguration<PessoaDTO>
     {
-        public PessoasDbContext() 
+        void IEntityTypeConfiguration<PessoaDTO>.Configure(EntityTypeBuilder<PessoaDTO> builder)
         {
-            Pessoas = new List<Pessoa>();
+            
         }
-        public List<Pessoa> Pessoas { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 
 namespace ProjetoTesteLar.Persistence
 {
-    public class PessoaEnderecoDbContext
+    public class PessoaEnderecosDbContext
     {
-        public PessoaEnderecoDbContext()
+        public PessoaEnderecosDbContext()
         {
             PessoasEnderecos = new List<PessoaEndereco>();
         }

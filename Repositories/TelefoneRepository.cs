@@ -1,4 +1,5 @@
-﻿using ProjetoTesteLar.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjetoTesteLar.DTOs;
 using ProjetoTesteLar.Persistence;
 using ProjetoTesteLar.Repositories.Intefaces;
 
@@ -6,26 +7,28 @@ namespace ProjetoTesteLar.Repositories
 {
     public class TelefoneRepository : ITelefoneRepository
     {
-        private readonly TelefonesDbContext _context;
-        private readonly PessoasDbContext _contextPessoa;
-        public TelefoneRepository(TelefonesDbContext context)
+        private readonly TesteLarDbContext _context;
+        public TelefoneRepository(TesteLarDbContext context)
         {
             _context = context;
         }
         public List<Telefone> GetAllTelefones()
         {
-            List<Telefone> telefones = _context.Telefones;
+            List<Telefone> telefones = _context.Telefones.ToList();
             return telefones;
         }       
 
         public Telefone GetTelefoneByNumero(string numero)
         {
-            return _context.Telefones.SingleOrDefault(p => p.Numero.Equals(numero));
+            return _context.Telefones
+                .Include(t => t.Pessoa)
+                .SingleOrDefault(p => p.Numero.Equals(numero));
         }
 
         public bool PostTelefone(Telefone telefone)
         {
             _context.Telefones.Add(telefone);
+            //_context.SaveChanges();
             return true;
         }
 
@@ -35,35 +38,37 @@ namespace ProjetoTesteLar.Repositories
 
             if (telefoneExistente != null)
             {
-                telefoneExistente.Update(numero, telefone.Tipo);
+                //telefoneExistente.Update(numero, telefone.Tipo);
+                _context.Update(telefoneExistente);
+                _context.SaveChanges();
                 return true;
             }
             else throw new Exception("Nenhum Telefone encontrado com o número informado");
         }
-        public bool DeleteTelefone(string numero)
+        public bool DeleteTelefone(int telefoneId)
         {
-            Telefone telefone = _context.Telefones.SingleOrDefault(p => p.Numero.Equals(numero));
+            Telefone telefone = _context.Telefones.SingleOrDefault(p => p.TelefoneId.Equals(telefoneId));
 
             if (telefone != null)
             {
                 _context.Telefones.Remove(telefone);
-                PessoasDbContext pessoaContext = new PessoasDbContext();
-                Pessoa pessoa = pessoaContext.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(telefone.PessoaId));
-                if (pessoa != null)
-                {
-                    Telefone telefoneExistente = pessoa.Telefones.SingleOrDefault(t => t.Numero.Equals(telefone.Numero));
-                    if (telefoneExistente != null)
-                    {
-                        pessoa.Telefones.Remove(telefoneExistente);
-                    }
-                }
+                _context.SaveChanges();
+                //Pessoa pessoa = pessoaContext.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(telefone.PessoaId));
+                //if (pessoa != null)
+                //{
+                //    Telefone telefoneExistente = pessoa.Telefones.SingleOrDefault(t => t.Numero.Equals(telefone.Numero));
+                //    if (telefoneExistente != null)
+                //    {
+                //        pessoa.Telefones.Remove(telefoneExistente);
+                //    }
+                //}
                 return true;
             }
             else throw new Exception("Nenhum Telefone encontrado com o número informado");
         }
         public List<Telefone> GetAllTelefonesPessoa(int pessoaId)
         {
-            List<Telefone> telefones = _context.Telefones;
+            List<Telefone> telefones = _context.Telefones.ToList();
             return telefones.FindAll(p => p.PessoaId.Equals(pessoaId));
         }        
     }

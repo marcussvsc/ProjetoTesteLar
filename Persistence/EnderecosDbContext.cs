@@ -1,14 +1,16 @@
-﻿using ProjetoTesteLar.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Hosting;
+using ProjetoTesteLar.DTOs;
 using ProjetoTesteLar.Entities;
 
 namespace ProjetoTesteLar.Persistence
 {
-    public class EnderecosDbContext
+    public class EnderecosDbContext : IEntityTypeConfiguration<Endereco>
     {
-        public EnderecosDbContext() 
+        public void Configure(EntityTypeBuilder<Endereco> builder)
         {
-            Enderecos = new List<Endereco>();
+            
         }
-        public List<Endereco> Enderecos { get; set; }
     }
 }

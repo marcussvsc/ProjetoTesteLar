@@ -8,15 +8,15 @@ namespace ProjetoTesteLar.Repositories
 {
     public class EnderecoRepository : IEnderecoRepository
     {
-        private readonly EnderecosDbContext _context;
-        public EnderecoRepository(EnderecosDbContext contex)
+        private readonly TesteLarDbContext _context;
+        public EnderecoRepository(TesteLarDbContext contex)
         {
             _context = contex;
         }       
 
         public List<Endereco> GetAllEnderecos()
         {
-            List<Endereco> enderecos = _context.Enderecos;
+            List<Endereco> enderecos = _context.Enderecos.ToList();
             return enderecos;
         }
 
@@ -28,6 +28,7 @@ namespace ProjetoTesteLar.Repositories
         public bool PostEndereco(Endereco endereco)
         {
             _context.Enderecos.Add(endereco);
+            _context.SaveChanges();
             return true;
         }
 
@@ -38,6 +39,8 @@ namespace ProjetoTesteLar.Repositories
             if (enderecoExistente != null)
             {
                 enderecoExistente.Update(endereco.CEP, endereco.Rua, endereco.Bairro, endereco.Numero,endereco.Cidade, endereco.Estado);
+                _context.Update(enderecoExistente);
+                _context.SaveChanges();
                 return true;
             }
             else throw new Exception("Nenhum Endereço encontrado com o número informado");
@@ -49,6 +52,7 @@ namespace ProjetoTesteLar.Repositories
             if (endereco != null)
             {
                 _context.Enderecos.Remove(endereco);
+                _context.SaveChanges();
                 return true;
             }
             else throw new Exception("Nenhum Endereço encontrado com o número informado");

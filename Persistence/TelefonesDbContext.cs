@@ -1,13 +1,16 @@
-﻿using ProjetoTesteLar.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Hosting;
+using ProjetoTesteLar.DTOs;
+using System.Reflection.Emit;
 
 namespace ProjetoTesteLar.Persistence
 {
-    public class TelefonesDbContext
+    public class TelefonesDbContext : IEntityTypeConfiguration<Telefone>
     {
-        public TelefonesDbContext() 
+        public void Configure(EntityTypeBuilder<Telefone> builder)
         {
-            Telefones = new List<Telefone>();
+            
         }
-        public List<Telefone> Telefones { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace ProjetoTesteLar.Controllers
             return Ok(pessoa);
         }
         [HttpPost("PostPessoa")]
-        public ActionResult<bool> PostPessoa(Pessoa pessoa)
+        public ActionResult<bool> PostPessoa(PessoaDTO pessoa)
         {
             _pessoaRepository.PostPessoa(pessoa);
             return CreatedAtAction(nameof(GetPessoaById), new { pessoaId = pessoa.PessoaId}, pessoa);    
@@ -68,7 +68,7 @@ namespace ProjetoTesteLar.Controllers
             return Ok(pessoa);
         }
         [HttpPut("PutPessoa/{pessoaId}")]
-        public ActionResult<bool> PutPessoa(Pessoa pessoa, int pessoaId)
+        public ActionResult<bool> PutPessoa(PessoaDTO pessoa, int pessoaId)
         {
             PessoaDTO pessoaExistente = _pessoaRepository.GetPessoaById(pessoaId);
             if (pessoaExistente == null)

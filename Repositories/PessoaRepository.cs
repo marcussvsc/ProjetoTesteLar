@@ -1,4 +1,5 @@
-﻿using ProjetoTesteLar.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjetoTesteLar.DTOs;
 using ProjetoTesteLar.Persistence;
 using ProjetoTesteLar.Repositories.Intefaces;
 
@@ -6,22 +7,21 @@ namespace ProjetoTesteLar.Repositories
 {
     public class PessoaRepository : IPessoaRepository
     {
-        private readonly PessoasDbContext _context;
-        private readonly TelefoneRepository telefoneRepository;
-        public PessoaRepository(PessoasDbContext context)
+        private readonly TesteLarDbContext _context;
+        public PessoaRepository(TesteLarDbContext context)
         {
             _context = context;
         }
 
-        public List<Pessoa> GetAllPessoas()
+        public List<PessoaDTO> GetAllPessoas()
         {
-            List<Pessoa> pessoas = _context.Pessoas;
+            List<PessoaDTO> pessoas = _context.Pessoas.ToList();
             return pessoas;
         }
 
         public PessoaDTO GetPessoaById(int pessoaId)
         {
-            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            PessoaDTO pessoa = _context.Pessoas.AsNoTracking().SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoa == null)
                 return null;
@@ -35,19 +35,25 @@ namespace ProjetoTesteLar.Repositories
             };
         }
 
-        public bool PostPessoa(Pessoa pessoa)
+        public bool PostPessoa(PessoaDTO pessoa)
         {
             _context.Pessoas.Add(pessoa);
+            _context.SaveChanges();
             return true;
         }        
 
-        public bool PutPessoa(Pessoa pessoa, int pessoaId)
+        public bool PutPessoa(PessoaDTO pessoa, int pessoaId)
         {
-            Pessoa pessoaExistente = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            PessoaDTO pessoaExistente = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoaExistente != null)
             {
-                pessoaExistente.Update(pessoa.Nome, pessoa.CPF, pessoa.DtNascimento, pessoa.Ativo);
+                pessoaExistente.Nome = pessoa.Nome;
+                pessoaExistente.CPF = pessoa.CPF;
+                pessoaExistente.DtNascimento = pessoa.DtNascimento;
+                pessoaExistente.Ativo = pessoa.Ativo;
+                _context.Update(pessoaExistente);
+                _context.SaveChanges();
                 return true;
             }
             else throw new Exception("Nenhuma Pessoa encontrada com o ID informado"); 
@@ -55,11 +61,12 @@ namespace ProjetoTesteLar.Repositories
 
         public bool DeletePessoa(int pessoaId)
         {
-            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            PessoaDTO pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
 
             if (pessoa != null)
             {
                 _context.Pessoas.Remove(pessoa);
+                _context.SaveChanges();
                 return true;
             }
             else throw new Exception("Nenhuma Pessoa encontrada com o ID informado");
@@ -68,8 +75,8 @@ namespace ProjetoTesteLar.Repositories
 
         private void PreencherPessoaTelefones(int pessoaId)
         {
-            Pessoa pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
-            pessoa.Telefones = telefoneRepository.GetAllTelefonesPessoa(pessoaId);
+            //PessoaDTO pessoa = _context.Pessoas.SingleOrDefault(p => p.PessoaId.Equals(pessoaId));
+            //pessoa.Telefones = telefoneRepository.GetAllTelefonesPessoa(pessoaId);
         }
 
     }

@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using ProjetoTesteLar.Persistence;
 using ProjetoTesteLar.Repositories;
 using ProjetoTesteLar.Repositories.Intefaces;
+using System.Text.Json.Serialization;
 
 namespace ProjetoTesteLar
 {
@@ -11,10 +13,14 @@ namespace ProjetoTesteLar
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton<PessoasDbContext>();
-            builder.Services.AddSingleton<TelefonesDbContext>();
-            builder.Services.AddSingleton<EnderecosDbContext>();
-            builder.Services.AddSingleton<PessoaEnderecoDbContext>();
+            //builder.Services.AddSingleton<PessoasDbContext>();
+            //builder.Services.AddDbContext<PessoasDbContext>(t => t.UseInMemoryDatabase("dbTesteLar"));
+            //builder.Services.AddSingleton<TelefonesDbContext>();
+            //builder.Services.AddDbContext<TelefonesDbContext>(t => t.UseInMemoryDatabase("dbTesteLar"));
+            //builder.Services.AddSingleton<EnderecosDbContext>();
+            //builder.Services.AddDbContext<EnderecosDbContext>(t => t.UseInMemoryDatabase("dbTesteLar"));
+            //builder.Services.AddSingleton<PessoaEnderecosDbContext>();
+            builder.Services.AddDbContext<TesteLarDbContext>(t => t.UseInMemoryDatabase("dbTesteLar"));
 
 
             builder.Services.AddControllers();
@@ -26,6 +32,8 @@ namespace ProjetoTesteLar
             builder.Services.AddScoped<ITelefoneRepository, TelefoneRepository>();
             builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
             builder.Services.AddScoped<IPessoaEnderecoRepository, PessoaEnderecoRepository>();
+            builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
             var app = builder.Build();
 

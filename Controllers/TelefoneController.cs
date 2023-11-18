@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoTesteLar.DTOs;
+using ProjetoTesteLar.DTOs.TelefoneDTos;
 using ProjetoTesteLar.Repositories.Intefaces;
 
 namespace ProjetoTesteLar.Controllers
@@ -9,9 +10,11 @@ namespace ProjetoTesteLar.Controllers
     public class TelefoneController : ControllerBase
     {
         private readonly ITelefoneRepository _telefoneRepository;
-        public TelefoneController(ITelefoneRepository telefoneRepository)
+        private readonly IPessoaRepository _pessoaRepository;
+        public TelefoneController(ITelefoneRepository telefoneRepository, IPessoaRepository pessoaRepository)
         {
             _telefoneRepository = telefoneRepository;
+            _pessoaRepository = pessoaRepository;
         }
         [HttpGet("GetAllTelefones")]
         public ActionResult<List<Telefone>> GetAllTelefones() 
@@ -32,8 +35,18 @@ namespace ProjetoTesteLar.Controllers
             return Ok(telefone);
         }        
         [HttpPost("PostTelefone")]
-        public ActionResult<bool> PostTelefone(Telefone telefone)
+        public ActionResult<bool> PostTelefone(CreateTelefoneDTO createTelefoneDTO)
         {
+            PessoaDTO pessoa = _pessoaRepository.GetPessoaById(createTelefoneDTO.PessoaId);
+            if(pessoa == null)
+                return NotFound();
+            Telefone telefone  = new Telefone() 
+            {
+                PessoaId = createTelefoneDTO.PessoaId,
+                Numero = createTelefoneDTO.Numero,
+                Tipo = createTelefoneDTO.Tipo
+            };
+            telefone.Pessoa = pessoa;
             _telefoneRepository.PostTelefone(telefone);
             return CreatedAtAction(nameof(GetTelefoneByNumero), new { numero = telefone.Numero }, telefone);
         }
@@ -52,7 +65,7 @@ namespace ProjetoTesteLar.Controllers
             Telefone telefone = _telefoneRepository.GetTelefoneByNumero(numero);
             if (telefone == null)
                 return NotFound();
-            _telefoneRepository.DeleteTelefone(telefone.Numero);
+            _telefoneRepository.DeleteTelefone(telefone.TelefoneId);
             return NoContent();
         }
     }

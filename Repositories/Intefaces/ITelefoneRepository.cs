@@ -9,6 +9,6 @@ namespace ProjetoTesteLar.Repositories.Intefaces
         public Telefone GetTelefoneByNumero(string numero);
         public bool PostTelefone(Telefone telefone);
         public bool PutTelefone(Telefone telefone, string numero);
-        public bool DeleteTelefone(string numero);
+        public bool DeleteTelefone(int telefoneId);
     }
 }
